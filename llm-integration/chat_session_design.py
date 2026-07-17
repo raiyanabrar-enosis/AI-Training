@@ -116,15 +116,27 @@ while True:
     if not question.strip():
         continue
 
+    # Add user question to history
     session.add_user_message(question)
 
-    print("Gemini is thinking...")
+    print("\nGemini: ", end="", flush=True)
 
-    response = client.models.generate_content(
+    # 1. Use the core models endpoint which fully supports streaming AND your history list
+    response_stream = client.models.generate_content_stream(
         model="gemini-3.5-flash",
         contents=session.get_clean_history()
     )
 
-    print(f"\nGemini: {response.text}\n")
+    full_response = ""
 
-    session.add_model_message(response.text)
+    # 2. Loop through the stream chunks
+    for chunk in response_stream:
+        # 3. Read the .text property from the standard model stream
+        if chunk.text:
+            print(chunk.text, end="", flush=True)
+            full_response += chunk.text           
+
+    print("\n") 
+
+    # 4. Save the fully assembled string into your history
+    session.add_model_message(full_response)
