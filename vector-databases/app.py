@@ -1,5 +1,6 @@
 from embedding import generate_embedding
 from chunking import read_pdf_pages, chunk_pages
+from qdrant_db import client, ensure_collection
 
 # Embedding example
 text = "Python is an object-oriented programming language."
@@ -25,3 +26,7 @@ print(f"First chunk is from page {chunks[0]['page']}")
 print(chunks[0]["text"][:300])
 print("---")
 print(chunks[1]["text"][:300])
+
+# Check and check collection
+ensure_collection()
+print(client.get_collections())
