@@ -1,16 +1,17 @@
 from google import genai
 
 from vector_databases.config import GEMINI_API_KEY, GENERATION_MODEL
-from vector_databases.semantic_search import search
+from vector_databases.semantic_search import search, search_filtered
 from rag.prompts import SYSTEM_INSTRUCTION, build_input
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
 
-def answer_stream(question, limit=5):
-    print("Generating...")
-
-    hits = search(question, limit=limit)
+def answer_stream(question, limit=5, source=None):
+    if source:
+        hits = search_filtered(question, source=source, limit=limit)
+    else:
+        hits = search(question, limit=limit)
 
     stream = client.interactions.create(
         model=GENERATION_MODEL,
@@ -40,5 +41,8 @@ def format_sources(hits):
 
 
 if __name__ == "__main__":
-    hits = answer_stream(input("Please enter your question: "))
+    question = input("Please enter your question: ")
+    source = input("Filter by file (blank for all): ").strip() or None
+
+    hits = answer_stream(question, source=source)
     print(format_sources(hits))
