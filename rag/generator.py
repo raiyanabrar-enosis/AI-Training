@@ -7,36 +7,38 @@ from rag.prompts import SYSTEM_INSTRUCTION, build_input
 client = genai.Client(api_key=GEMINI_API_KEY)
 
 
-def answer(question, limit=5):
+def answer_stream(question, limit=5):
     print("Generating...")
 
     hits = search(question, limit=limit)
 
-    interaction = client.interactions.create(
+    stream = client.interactions.create(
         model=GENERATION_MODEL,
         system_instruction=SYSTEM_INSTRUCTION,
         input=build_input(question, hits),
+        stream=True,
     )
 
-    return {
-        "answer": interaction.output_text,
-        "sources": hits,
-        "interaction_id": interaction.id,
-    }
+    for event in stream:
+        if event.event_type == "step.delta":
+            if event.delta.type == "text":
+                print(event.delta.text, end="", flush=True)
+    print()
+
+    return hits
 
 
-def format_answer(result):
-    lines = [result["answer"], "", "Sources:"]
+def format_sources(hits):
+    lines = ["", "Sources:"]
     seen = set()
-    for i, hit in enumerate(result["sources"], start=1):
+    for i, hit in enumerate(hits, start=1):
         key = (hit["source"], hit["page"])
         marker = "" if key not in seen else "  (also cited)"
         seen.add(key)
         lines.append(f"  [{i}] {hit['source']}, page {hit['page']}{marker}")
-
     return "\n".join(lines)
 
 
 if __name__ == "__main__":
-    result = answer(input("Please enter your question: "))
-    print(format_answer(result))
+    hits = answer_stream(input("Please enter your question: "))
+    print(format_sources(hits))
