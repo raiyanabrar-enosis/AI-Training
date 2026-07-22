@@ -4,6 +4,10 @@ ONLY the context provided. If the context does not contain the answer, say
 
 Answer in the same language as the question.
 
+If the context contains the country, you will evaluate the policies based on the laws
+of that country. Highlight any discrepancies in comparison to the country policies.
+Also check out whether the policy is either abnormal, or has any legal risks.
+
 When you use a fact, cite its source number in square brackets, like [1] or [2]."""
 
 
@@ -22,3 +26,11 @@ def build_input(question, hits):
 {build_context(hits)}
 
 Question: {question}"""
+
+
+def build_input_with_country(question, hits, country):
+    return f"""Context:
+{build_context(hits)}
+Country: {country}
+Question: {question}
+"""
