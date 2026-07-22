@@ -1,7 +1,7 @@
 import os
 
 from chunking import read_pdf_pages, chunk_pages
-from embedding import generate_embedding
+from embedding import generate_embeddings
 from qdrant_db import ensure_collection, upsert_chunks
 
 DOCUMENTS_DIR = "documents"
@@ -17,7 +17,6 @@ def index_all():
         return
 
     point_id = 0
-    batch = []
 
     for filename in pdf_files:
         path = os.path.join(DOCUMENTS_DIR, filename)
@@ -27,24 +26,29 @@ def index_all():
         chunks = chunk_pages(pages)
         print(f"  {len(chunks)} chunks")
 
-        for chunk in chunks:
-            vector = generate_embedding(chunk["text"])
-            batch.append({
-                "id": point_id,
-                "vector": vector,
-                "text": chunk["text"],
-                "page": chunk["page"],
-                "source": filename,
-            })
-            point_id += 1
+        for start in range(0, len(chunks), BATCH_SIZE):
+            slice_ = chunks[start:start + BATCH_SIZE]
+            texts = [c["text"] for c in slice_]
 
-            if len(batch) >= BATCH_SIZE:
-                upsert_chunks(batch)
-                print(f"  stored {point_id} chunks so far")
-                batch = []
+            vectors = generate_embeddings(texts)     # ONE request for 50 chunks
+            if len(vectors) != len(slice_):
+                raise RuntimeError(
+                    f"Expected {len(slice_)} embeddings, got {len(vectors)}"
+                )
 
-    if batch:
-        upsert_chunks(batch)
+            records = []
+            for chunk, vector in zip(slice_, vectors):
+                records.append({
+                    "id": point_id,
+                    "vector": vector,
+                    "text": chunk["text"],
+                    "page": chunk["page"],
+                    "source": filename,
+                })
+                point_id += 1
+
+            upsert_chunks(records)
+            print(f"  stored {point_id} chunks so far")
 
     print(f"Done. Indexed {point_id} chunks from {len(pdf_files)} PDF(s).")
 

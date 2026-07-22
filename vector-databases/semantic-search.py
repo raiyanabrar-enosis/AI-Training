@@ -25,7 +25,7 @@ def search(question, limit=5):
 
 
 if __name__ == "__main__":
-    question = input("Enter your python related question: ")
+    question = input("Enter your related question: ")
     for hit in search(question):
         print(f"[{hit['score']:.3f}] {hit['source']} p.{hit['page']}")
         print(hit["text"])
