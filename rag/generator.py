@@ -25,9 +25,18 @@ def answer(question, limit=5):
     }
 
 
+def format_answer(result):
+    lines = [result["answer"], "", "Sources:"]
+    seen = set()
+    for i, hit in enumerate(result["sources"], start=1):
+        key = (hit["source"], hit["page"])
+        marker = "" if key not in seen else "  (also cited)"
+        seen.add(key)
+        lines.append(f"  [{i}] {hit['source']}, page {hit['page']}{marker}")
+
+    return "\n".join(lines)
+
+
 if __name__ == "__main__":
     result = answer(input("Please enter your question: "))
-    print(result["answer"])
-    print("\nSources:")
-    for i, hit in enumerate(result["sources"], start=1):
-        print(f"  [{i}] {hit['source']} p.{hit['page']}  (score {hit['score']:.3f})")
+    print(format_answer(result))
