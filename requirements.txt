@@ -1,0 +1,15 @@
+# Gemini SDK — embeddings and generation
+google-genai
+
+# Vector database client
+qdrant-client
+
+# PDF text extraction (imported as `fitz`)
+pymupdf
+pypdf
+
+# Retry/backoff on rate limits
+tenacity
+
+# Loads .env
+python-dotenv

@@ -1,6 +1,6 @@
-from qdrant_db import client
-from embedding import generate_embedding
-from config import COLLECTION_NAME
+from vector_databases.qdrant_db import client
+from vector_databases.embedding import generate_embedding
+from vector_databases.config import COLLECTION_NAME
 
 
 def search(question, limit=5):

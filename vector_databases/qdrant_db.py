@@ -1,8 +1,8 @@
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams, PointStruct
 
-from config import QDRANT_HOST, QDRANT_PORT, COLLECTION_NAME
-from embedding import generate_embedding
+from vector_databases.config import QDRANT_HOST, QDRANT_PORT, COLLECTION_NAME
+from vector_databases.embedding import generate_embedding
 
 client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
 

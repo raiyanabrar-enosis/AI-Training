@@ -1,6 +1,6 @@
-from embedding import generate_embedding
-from chunking import read_pdf_pages, read_pdf_pages_unicode, chunk_pages
-from qdrant_db import client, ensure_collection
+from vector_databases.embedding import generate_embedding
+from vector_databases.chunking import read_pdf_pages, read_pdf_pages_unicode, chunk_pages
+from vector_databases.qdrant_db import client, ensure_collection
 
 # Embedding example
 text = "Python is an object-oriented programming language."

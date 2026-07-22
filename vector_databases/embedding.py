@@ -1,8 +1,8 @@
 import time
 from google import genai
 
-from config import GEMINI_API_KEY
-from config import EMBEDDING_MODEL
+from vector_databases.config import GEMINI_API_KEY
+from vector_databases.config import EMBEDDING_MODEL
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 

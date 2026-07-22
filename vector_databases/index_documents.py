@@ -1,8 +1,8 @@
 import os
 
-from chunking import read_pdf_pages, chunk_pages
-from embedding import generate_embeddings
-from qdrant_db import ensure_collection, upsert_chunks
+from vector_databases.chunking import read_pdf_pages, chunk_pages
+from vector_databases.embedding import generate_embeddings
+from vector_databases.qdrant_db import ensure_collection, upsert_chunks
 
 DOCUMENTS_DIR = "documents"
 BATCH_SIZE = 50
