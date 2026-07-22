@@ -2,12 +2,12 @@ from google import genai
 
 from vector_databases.config import GEMINI_API_KEY, GENERATION_MODEL
 from vector_databases.semantic_search import search, search_filtered
-from rag.prompts import SYSTEM_INSTRUCTION, build_input
+from rag.prompts import SYSTEM_INSTRUCTION, build_input, build_input_with_country
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
 
-def answer_stream(question, limit=5, source=None):
+def answer_stream(question, limit=5, source=None, country=None):
     if source:
         hits = search_filtered(question, source=source, limit=limit)
     else:
@@ -16,7 +16,9 @@ def answer_stream(question, limit=5, source=None):
     stream = client.interactions.create(
         model=GENERATION_MODEL,
         system_instruction=SYSTEM_INSTRUCTION,
-        input=build_input(question, hits),
+        input=build_input_with_country(question, hits, country)
+        if country
+        else build_input(question, hits),
         stream=True,
     )
 
@@ -43,6 +45,7 @@ def format_sources(hits):
 if __name__ == "__main__":
     question = input("Please enter your question: ")
     source = input("Filter by file (blank for all): ").strip() or None
+    country = input("Enter country (optional): ").strip() or None
 
-    hits = answer_stream(question, source=source)
+    hits = answer_stream(question, source=source, country=country)
     print(format_sources(hits))
