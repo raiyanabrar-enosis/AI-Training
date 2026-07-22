@@ -13,3 +13,6 @@ tenacity
 
 # Loads .env
 python-dotenv
+
+fastapi
+uvicorn[standard]
