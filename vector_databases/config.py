@@ -8,7 +8,7 @@ load_dotenv(PROJECT_ROOT / ".env")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-EMBEDDING_MODEL = "gemini-embedding-2"
+EMBEDDING_MODEL = "BAAI/bge-m3"
 GENERATION_MODEL = "gemini-3.5-flash"
 
 QDRANT_HOST = os.getenv("QDRANT_HOST", "localhost")
@@ -16,3 +16,5 @@ QDRANT_PORT = 6333
 COLLECTION_NAME = "documents"
 
 DOCUMENTS_DIR = PROJECT_ROOT / "documents"
+
+BATCH_SIZE = 32
