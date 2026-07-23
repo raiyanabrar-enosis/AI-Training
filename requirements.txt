@@ -17,3 +17,10 @@ python-dotenv
 fastapi
 uvicorn[standard]
 sentence-transformers
+
+langchain-text-splitters
+
+pageindex
+
+psycopg2
+numpy

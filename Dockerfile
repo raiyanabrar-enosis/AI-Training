@@ -8,6 +8,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY vector_databases/ ./vector_databases/
+COPY vector_pgvector/ ./vector_pgvector/
 COPY rag/ ./rag/
 COPY api/ ./api/
 
