@@ -8,7 +8,7 @@ load_dotenv(PROJECT_ROOT / ".env")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-EMBEDDING_MODEL = "BAAI/bge-m3"
+EMBEDDING_MODEL = "Qwen/Qwen3-Embedding-4B"
 GENERATION_MODEL = "gemini-3.5-flash"
 
 QDRANT_HOST = os.getenv("QDRANT_HOST", "localhost")
