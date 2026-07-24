@@ -1,3 +1,9 @@
+# Intel Arc (XPU) GPU builds of torch; falls back to PyPI on other hardware
+--extra-index-url https://download.pytorch.org/whl/xpu
+torch
+torchvision
+torchaudio
+
 # Gemini SDK — embeddings and generation
 google-genai
 
@@ -24,3 +30,12 @@ pageindex
 
 psycopg2
 numpy
+
+# Hybrid search — BM25 sparse vectors
+fastembed
+
+# Vector optimization — PCA variant
+scikit-learn
+
+# TurboVec — quantized ANN index for large embeddings
+turbovec
